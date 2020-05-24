@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,25 @@ namespace DOTNET_RPG.Services.CharacterSevices
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
+        {
+               ServiceResponse<List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>(); 
+            try{
+
+                Character character = characters.First(c => c.ID == id); 
+                characters.Remove(character); 
+
+                serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
+             }
+             catch(Exception ex){
+                serviceResponse.Success =false;
+                serviceResponse.Message = ex.Message; 
+            }
+     
+
+            return serviceResponse;
+        }
+
         public async Task <ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             ServiceResponse <List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
@@ -41,6 +61,30 @@ namespace DOTNET_RPG.Services.CharacterSevices
             ServiceResponse <GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>();
             Character selected = characters.FirstOrDefault(c => c.ID == id); 
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(selected);
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updateCharacter)
+        {
+            ServiceResponse<GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>(); 
+            try{
+
+                Character character = characters.FirstOrDefault(c => c.ID == updateCharacter.ID); 
+                character.Name = updateCharacter.Name; 
+                character.Intelligence = updateCharacter.Intelligence;
+                character.Defense = updateCharacter.Defense; 
+                character.Class = updateCharacter.Class; 
+                character.HitPoints = updateCharacter.HitPoints; 
+                character.Strength = updateCharacter.Strength; 
+
+                serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+             }
+             catch(Exception ex){
+                serviceResponse.Success =false;
+                serviceResponse.Message = ex.Message; 
+            }
+     
+
             return serviceResponse;
         }
     }
