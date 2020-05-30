@@ -5,9 +5,12 @@ using System.Linq;
 using DOTNET_RPG.Services.CharacterSevices;
 using System.Threading.Tasks;
 using DOTNET_RPG.Dtos.Character;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace DOTNET_RPG.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CharacterController: ControllerBase
@@ -24,16 +27,18 @@ namespace DOTNET_RPG.Controllers
             new Character(), 
             new Character{ ID = 1, Name = "Sam"}, 
         };
-        
+
         [HttpGet("GetAll")]
         public async Task <IActionResult> Get()
         {
-            return Ok(await _characterService.GetAllCharacters());
+            int userid = int.Parse(User.Claims.FirstOrDefault(c=> c.Type == ClaimTypes.NameIdentifier).Value);
+            return Ok(await _characterService.GetAllCharacters(userid));
         }
 
         public async Task<IActionResult> GetSingle()
         {
-            return Ok(await _characterService.GetAllCharacters());
+            int userid = int.Parse(User.Claims.FirstOrDefault(c=> c.Type == ClaimTypes.NameIdentifier).Value);
+            return Ok(await _characterService.GetAllCharacters(userid));
         }
         
         [HttpGet("{id}")]
