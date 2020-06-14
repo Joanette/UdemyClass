@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DOTNET_RPG.Data;
 using DOTNET_RPG.Dtos.Fight;
 using DOTNET_RPG.Models;
@@ -12,10 +13,12 @@ namespace DOTNET_RPG.Services.FightServices
     public class FightService : IFightService
     {
         private readonly DataContext _context;
-        public FightService(DataContext context)
+        private readonly IMapper _mapper;
+
+        public FightService(DataContext context, IMapper mapper)
         {
             _context = context;
-
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse<AttackResultDto>> WeaponAttack(WeaponAttackDto request)
@@ -173,6 +176,20 @@ namespace DOTNET_RPG.Services.FightServices
             }
             return response;
         }
-        
+
+        public async Task<ServiceResponse<List<HighscoreDto>>> GetHighscore()
+        {
+            List<Character> characters = await _context.Characters
+            .Where(c => c.Fights>0)
+            .OrderByDescending(c => c.Victories)
+            .ThenBy(c => c.Defeats)
+            .ToListAsync();
+
+            var response = new ServiceResponse<List<HighscoreDto>>
+            {
+                Data = characters.Select(c=> _mapper.Map<HighscoreDto>(c)).ToList()
+            };
+            return response;
+        }
     }
 }
