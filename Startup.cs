@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DOTNET_RPG.Data;
 using DOTNET_RPG.Services.CharacterSevices;
+using DOTNET_RPG.Services.CharacterSkillService;
+using DOTNET_RPG.Services.FightServices;
+using DOTNET_RPG.Services.WeaponServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +52,10 @@ namespace DOTNET_RPG
                     ValidateAudience = false
                 };
             });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IWeaponService, WeaponService>();
+            services.AddScoped<ICharacterSkillService, CharacterSkillService>();
+            services.AddScoped<IFightService, FightService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

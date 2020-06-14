@@ -31,14 +31,13 @@ namespace DOTNET_RPG.Controllers
         [HttpGet("GetAll")]
         public async Task <IActionResult> Get()
         {
-            int userid = int.Parse(User.Claims.FirstOrDefault(c=> c.Type == ClaimTypes.NameIdentifier).Value);
-            return Ok(await _characterService.GetAllCharacters(userid));
+            return Ok(await _characterService.GetAllCharacters());
         }
 
         public async Task<IActionResult> GetSingle()
         {
             int userid = int.Parse(User.Claims.FirstOrDefault(c=> c.Type == ClaimTypes.NameIdentifier).Value);
-            return Ok(await _characterService.GetAllCharacters(userid));
+            return Ok(await _characterService.GetAllCharacters());
         }
         
         [HttpGet("{id}")]

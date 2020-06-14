@@ -4,14 +4,16 @@ using DOTNET_RPG.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DOTNET_RPG.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200607212829_Skill")]
+    partial class Skill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,13 +31,7 @@ namespace DOTNET_RPG.Migrations
                     b.Property<int>("Class")
                         .HasColumnType("int");
 
-                    b.Property<int>("Defeats")
-                        .HasColumnType("int");
-
                     b.Property<int>("Defense")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Fights")
                         .HasColumnType("int");
 
                     b.Property<int>("HitPoints")
@@ -48,9 +44,6 @@ namespace DOTNET_RPG.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Strength")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Victories")
                         .HasColumnType("int");
 
                     b.Property<int?>("userId")
@@ -151,7 +144,7 @@ namespace DOTNET_RPG.Migrations
             modelBuilder.Entity("DOTNET_RPG.Models.CharacterSkill", b =>
                 {
                     b.HasOne("DOTNET_RPG.Models.Character", "Character")
-                        .WithMany("CharacterSkills")
+                        .WithMany("CharacterSkill")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
